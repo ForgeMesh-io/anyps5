@@ -1,0 +1,25 @@
+{
+  "id": "ORB-0011",
+  "swarm": "orbis",
+  "title": "Triage needs-rebase and long-idle open PRs",
+  "objective": "523 open PRs carry 'needs rebase' (229 created before 2026-11-11), 133 are older than 30 days, and 20 were not updated since 2026-11-18.",
+  "description": "523 open PRs carry 'needs rebase' (229 created before 2026-11-11), 133 are older than 30 days, and 20 were not updated since 2026-11-18. 5 are labelled 'already in main' (7704, 22162, 22468, 22595, 23060) and 9138 is the only 'stale' one. Classify the old ones: superseded by a merged PR, superseded by an open duplicate, or still useful and rebasable by ORBIS.",
+  "type": "scout",
+  "priority": 3,
+  "risk": "low",
+  "components": [
+    "sync"
+  ],
+  "files": [],
+  "hardware": [],
+  "acceptance": [
+    "List of PRs older than 30 days with one class each and evidence (merged PR number, duplicate, or rebase result)",
+    "'already in main' PRs excluded from every ORBIS integration list",
+    "No upstream interaction"
+  ],
+  "execution": "none",
+  "profile": "research",
+  "depends_on": [
+    "ORB-0003"
+  ]
+}

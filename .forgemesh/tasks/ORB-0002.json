@@ -1,0 +1,33 @@
+{
+  "id": "ORB-0002",
+  "swarm": "orbis",
+  "title": "Reproduce the upstream lavapipe test baseline inside the container",
+  "objective": "Run ctest with the release.yml settings (ANYPS5_REQUIRE_VULKAN=1, GALLIUM_OVERRIDE_CPU_CAPS=avx, --timeout 120, -E '^precise_wait$') on mesa-vulkan-drivers lavapipe.",
+  "description": "Run ctest with the release.yml settings (ANYPS5_REQUIRE_VULKAN=1, GALLIUM_OVERRIDE_CPU_CAPS=avx, --timeout 120, -E '^precise_wait$') on mesa-vulkan-drivers lavapipe. Record pass/fail per test as the ORBIS baseline for main. Expected known issues: write-watch tests need host kernel >= 6.7; four native depth tests fail without /dev/udmabuf (#23709); agc_driver_scattered_runs and agc_driver_image_table_packed_guards fail on some upstream runners (#24834).",
+  "type": "validator",
+  "priority": 0,
+  "risk": "medium",
+  "components": [
+    "tests",
+    "agc"
+  ],
+  "files": [
+    ".github/workflows/release.yml",
+    ".github/workflows/build.yml",
+    "tools/check_test_registration.py"
+  ],
+  "hardware": [
+    "os:linux",
+    "gpu:vulkan"
+  ],
+  "acceptance": [
+    "JUnit XML and ctest log stored as a baseline artifact with the upstream SHA and Mesa version (dpkg-query -W mesa-vulkan-drivers)",
+    "Each failure is classified: environment (kernel, udmabuf), known upstream issue (with issue number), or new",
+    "Tests over 30 s are listed (CONTRIBUTING.md limit)"
+  ],
+  "execution": "container",
+  "profile": "gpu",
+  "depends_on": [
+    "ORB-0001"
+  ]
+}

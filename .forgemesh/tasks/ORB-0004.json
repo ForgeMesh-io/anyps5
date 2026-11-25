@@ -1,0 +1,36 @@
+{
+  "id": "ORB-0004",
+  "swarm": "orbis",
+  "title": "Choose a winner in each duplicate-PR cluster with a Fixes reference",
+  "objective": "Clusters in .forgemesh/research/pr-clusters.json where several open PRs reference the same issue: #15234 (15242, 21451, 26698), #26881 (23014, 27123), #22509 (22510, 26696), #25225 (25226, 25279), #23485 (23486, 24987), #11977 (12316, 22382), #14439 (14944, 19852), #23480 (23787, 26690), #15742 (20580, 26221).",
+  "description": "Clusters in .forgemesh/research/pr-clusters.json where several open PRs reference the same issue: #15234 (15242, 21451, 26698), #26881 (23014, 27123), #22509 (22510, 26696), #25225 (25226, 25279), #23485 (23486, 24987), #11977 (12316, 22382), #14439 (14944, 19852), #23480 (23787, 26690), #15742 (20580, 26221). For each cluster, diff the candidates, check whether the linked issue is still open, and pick one with reasons. Read-only: no comments upstream.",
+  "type": "reviewer",
+  "priority": 1,
+  "risk": "medium",
+  "components": [
+    "relinker",
+    "agc",
+    "shader",
+    "libSceJson2"
+  ],
+  "files": [
+    "core/relinker",
+    "core/libs/prx/libSceAgcDriver",
+    "core/shader/recompiler",
+    "core/libs/prx/libSceJson2"
+  ],
+  "hardware": [
+    "os:linux",
+    "gpu:vulkan"
+  ],
+  "acceptance": [
+    "One decision record per cluster: chosen PR, rejected PRs, reasons, linked issue state",
+    "The chosen PR merges cleanly into the current ORBIS main, or the conflict is described",
+    "Tests added or changed by the chosen PR pass in the ORB-002 container"
+  ],
+  "execution": "container",
+  "profile": "gpu",
+  "depends_on": [
+    "ORB-0003"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "ORB-0007",
+  "swarm": "orbis",
+  "title": "Run the AMD Polaris / pre-RDNA2 failing AGC tests on real hardware",
+  "objective": "Open upstream issues: #9759 (agc_driver_sample_order_recipe_depth_locations fails on RADV Polaris) and #15316 (agc_driver_f32_fma_denormal_mode2 fails on RADV before RDNA2: Mesa splits GLSL Fma).",
+  "description": "Open upstream issues: #9759 (agc_driver_sample_order_recipe_depth_locations fails on RADV Polaris) and #15316 (agc_driver_f32_fma_denormal_mode2 fails on RADV before RDNA2: Mesa splits GLSL Fma). Closed related: #9781 (agc_idle_publish_wait on RADV Polaris). Re-run these tests on ORBIS main on a Polaris card (RX 470/480/570/580) with RADV and record the Mesa version, so ORBIS knows whether they still fail.",
+  "type": "benchmarker",
+  "priority": 1,
+  "risk": "medium",
+  "components": [
+    "agc",
+    "shader"
+  ],
+  "files": [
+    "core/libs/prx/libSceAgcDriver/tests/execution/F32FmaDenormalMode2.cpp",
+    "core/libs/prx/libSceAgcDriver/tests/cmake/agc_driver_sample_order_tests.cmake",
+    "core/libs/prx/libSceAgcDriver/Graphics/src/SampleOrder.cpp"
+  ],
+  "hardware": [
+    "os:linux",
+    "gpu:vulkan",
+    "gpu:amd",
+    "gpu:gfx803"
+  ],
+  "acceptance": [
+    "Host report (ANYPS5_HOST_REPORT=1) attached: GPU, driver, Mesa and kernel version",
+    "Pass/fail for agc_driver_sample_order_recipe_depth_locations, agc_driver_f32_fma_denormal_mode2 and agc_idle_publish_wait, with logs",
+    "Vulkan validation-layer run (>= 1.4.335) with the VUID- count"
+  ],
+  "execution": "container",
+  "profile": "gpu",
+  "depends_on": [
+    "ORB-0002"
+  ]
+}

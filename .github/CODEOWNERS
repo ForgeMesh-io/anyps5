@@ -1,0 +1,5 @@
+# ForgeMesh coordination files: changes need a ForgeMesh maintainer review.
+/.forgemesh/                     @FRGMesh
+/FORGEMESH.md                    @FRGMesh
+/.github/workflows/forgemesh*.yml @FRGMesh
+/.github/CODEOWNERS              @FRGMesh

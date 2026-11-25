@@ -1,0 +1,28 @@
+{
+  "id": "ORB-0014",
+  "swarm": "orbis",
+  "title": "Track the upstream main Linux CI failure on anyps5-2 runners (#24834)",
+  "objective": "Issue #24834 (opened 2026-11-21): agc_driver_scattered_runs and agc_driver_image_table_packed_guards fail on every main Linux job on the anyps5-2 runners since 17 Nov, and pass on anyps5-3.",
+  "description": "Issue #24834 (opened 2026-11-21): agc_driver_scattered_runs and agc_driver_image_table_packed_guards fail on every main Linux job on the anyps5-2 runners since 17 Nov, and pass on anyps5-3. Find out whether the ORB-002 container reproduces it and which host property (CPU, Mesa, kernel) matters, so ORBIS does not blame integrated PRs for it.",
+  "type": "research",
+  "priority": 2,
+  "risk": "low",
+  "components": [
+    "agc",
+    "ci"
+  ],
+  "files": [
+    "core/libs/prx/libSceAgcDriver/tests"
+  ],
+  "hardware": [
+    "os:linux",
+    "gpu:vulkan"
+  ],
+  "acceptance": [
+    "Reproduced or not reproduced in the ORBIS container, with Mesa version and CPU model",
+    "Both tests added to an ORBIS known-failure list with the issue number if they fail on main",
+    "Host properties that differ between passing and failing runs listed"
+  ],
+  "execution": "container",
+  "profile": "gpu"
+}

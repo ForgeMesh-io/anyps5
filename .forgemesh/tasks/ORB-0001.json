@@ -1,0 +1,32 @@
+{
+  "id": "ORB-0001",
+  "swarm": "orbis",
+  "title": "Docker image for the upstream Linux build (no downloaded FFmpeg binaries)",
+  "objective": "Write an ORBIS Dockerfile on ubuntu:24.04 using packages_debian and the commands in .forgemesh/research/build-deps.json.",
+  "description": "Write an ORBIS Dockerfile on ubuntu:24.04 using packages_debian and the commands in .forgemesh/research/build-deps.json. Configure downloads FFmpeg binaries unless FFMPEG_PREBUILT_DIR is set (BUILD.md line 77), which breaks the no-binaries rule. Find out how 3rdparty/ffmpeg-core produces its package and either build it from source in a separate stage or document why that is not possible.",
+  "type": "builder",
+  "priority": 0,
+  "risk": "medium",
+  "components": [
+    "build",
+    "ci"
+  ],
+  "files": [
+    "CMakeLists.txt",
+    "cmake/SystemDeps.cmake",
+    "docs/dev/BUILD.md",
+    ".github/workflows/release.yml",
+    "3rdparty/ffmpeg-core"
+  ],
+  "hardware": [
+    "os:linux",
+    "gpu:vulkan"
+  ],
+  "acceptance": [
+    "docker build completes the configure and `cmake --build build` on a clean checkout of upstream main at a pinned SHA",
+    "Configure log shows no FFmpeg download, or the task report states exactly which artifact is downloaded and from where",
+    "Image pins the upstream SHA and records the submodule SHAs (`git submodule status`)"
+  ],
+  "execution": "container",
+  "profile": "gpu"
+}

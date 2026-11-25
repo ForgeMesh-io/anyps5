@@ -1,0 +1,22 @@
+{
+  "id": "ORB-0003",
+  "swarm": "orbis",
+  "title": "Upstream sync job: track main and open PR metadata read-only",
+  "objective": "Upstream merges about 1000 commits per day to main (790 commits since 2026-11-24 per the commits API on 2026-11-25) and has 2666 open PRs.",
+  "description": "Upstream merges about 1000 commits per day to main (790 commits since 2026-11-24 per the commits API on 2026-11-25) and has 2666 open PRs. Build a scheduled read-only fetch of main and of open PR metadata (number, title, author, labels, head SHA, Fixes/Unblocks/Depends lines) with gh api pagination, under a fixed call budget. No writes to upstream.",
+  "type": "integrator",
+  "priority": 0,
+  "risk": "low",
+  "components": [
+    "sync"
+  ],
+  "files": [],
+  "hardware": [],
+  "acceptance": [
+    "Job uses only GET requests and records rate-limit usage per run",
+    "Output is a JSONL snapshot comparable across runs (new, closed, merged and label changes)",
+    "ORBIS main fast-forwards from upstream main without local divergence, or the divergence is reported"
+  ],
+  "execution": "none",
+  "profile": "research"
+}

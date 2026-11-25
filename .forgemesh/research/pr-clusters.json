@@ -1,0 +1,475 @@
+[
+  {
+    "theme": "libs/prx: mass 'drop redundant errno saves' refactor series",
+    "prs": [
+      26502,
+      26506,
+      26508,
+      26509,
+      26510,
+      26511,
+      26512,
+      26513,
+      26514,
+      26515,
+      26522,
+      26523,
+      26887,
+      26888,
+      26889,
+      26890,
+      26891,
+      26892,
+      26893,
+      26894,
+      26895,
+      26896,
+      26897,
+      26898,
+      26899,
+      26900,
+      26901,
+      26902,
+      26903,
+      26904,
+      26905,
+      26906,
+      26907,
+      26908,
+      26909,
+      26910,
+      26911,
+      26914,
+      26915,
+      26916,
+      26917,
+      26918,
+      26919,
+      26920,
+      26921,
+      26922,
+      26923,
+      26924,
+      26925,
+      26926,
+      26927,
+      26928,
+      26929,
+      26930,
+      26931,
+      26932,
+      26933,
+      26934,
+      26935,
+      26936,
+      26937,
+      26938,
+      26939,
+      26940,
+      26941,
+      26942,
+      26943,
+      26944,
+      26945,
+      26946,
+      26947,
+      26948,
+      26949,
+      26950,
+      26951,
+      26952,
+      26953,
+      26954,
+      26955,
+      26956,
+      26957,
+      26958,
+      26959,
+      26960,
+      26961,
+      26962,
+      26963,
+      26964,
+      26965,
+      26966,
+      26967,
+      26968,
+      26969,
+      26970,
+      26971,
+      26972,
+      26973,
+      26974,
+      26975,
+      26976,
+      26977,
+      26978,
+      26979,
+      26980,
+      26981,
+      26982,
+      26983,
+      26984,
+      26985,
+      26986,
+      26987,
+      26988,
+      27017,
+      27018,
+      27019,
+      27020,
+      27021,
+      27022,
+      27023,
+      27024,
+      27025,
+      27026,
+      27027,
+      27028,
+      27029,
+      27030,
+      27031,
+      27032,
+      27033,
+      27034,
+      27035,
+      27036,
+      27037,
+      27038,
+      27039,
+      27040,
+      27041,
+      27042,
+      27043,
+      27044,
+      27045,
+      27046,
+      27047,
+      27048,
+      27049,
+      27050,
+      27051,
+      27052,
+      27053,
+      27054,
+      27055,
+      27056,
+      27057,
+      27058,
+      27059,
+      27060,
+      27061,
+      27062,
+      27063,
+      27064,
+      27065,
+      27066,
+      27067,
+      27068,
+      27069,
+      27070,
+      27071,
+      27072,
+      27073,
+      27074,
+      27075,
+      27076,
+      27077,
+      27078,
+      27079,
+      27080,
+      27081,
+      27082,
+      27083,
+      27084,
+      27085,
+      27086,
+      27087,
+      27088,
+      27089,
+      27090,
+      27091,
+      27092,
+      27093,
+      27094,
+      27095,
+      27096,
+      27097,
+      27098,
+      27099,
+      27100,
+      27101,
+      27102,
+      27103,
+      27104,
+      27105,
+      27106,
+      27107,
+      27108,
+      27109,
+      27110,
+      27111,
+      27112,
+      27113,
+      27114,
+      27115,
+      27116
+    ],
+    "rationale": "All by one author (sschandra2006; 212 open, 35 merged per search API). 130 open PRs share the exact title suffix 'drop redundant errno saves around guest copies', one PR per prx library; 200 were created on 2026-11-25. Same mechanical change across libraries, so it is one review/integration unit, not independent work.",
+    "confidence": "high"
+  },
+  {
+    "theme": "relinker: ignore PT_NULL program headers in strict analysis",
+    "prs": [
+      15242,
+      21451,
+      26698
+    ],
+    "rationale": "Three authors, near-identical titles, all bodies reference 'Fixes #15234'. 15242 is a draft labelled 'needs rebase'.",
+    "confidence": "high"
+  },
+  {
+    "theme": "libSceJson2: safely probe guest text in String methods and search",
+    "prs": [
+      23014,
+      27123
+    ],
+    "rationale": "Identical titles; both bodies reference 'Fixes #26881'.",
+    "confidence": "high"
+  },
+  {
+    "theme": "agc: trace counts dropped/not counted for bound threads",
+    "prs": [
+      22510,
+      26696
+    ],
+    "rationale": "Both reference 'Fixes #22509'; different wording, same defect.",
+    "confidence": "high"
+  },
+  {
+    "theme": "agc/libc: read-trap resolution deadlock against GPU locks (macOS ImportWatched)",
+    "prs": [
+      20580,
+      26221
+    ],
+    "rationale": "Both reference 'Fixes #15742' (issue: 'macOS: a read trap resolved on the importing thread deadlocks ImportWatched') but take different approaches (order against GPU mutex vs refuse host import). 26221 is in 'review queue'; 20580 needs rebase.",
+    "confidence": "medium"
+  },
+  {
+    "theme": "agc: compute dispatch dropped while background shader work is pending",
+    "prs": [
+      25226,
+      25279
+    ],
+    "rationale": "Both reference 'Fixes #25225'; titles describe the same wait-instead-of-drop fix.",
+    "confidence": "high"
+  },
+  {
+    "theme": "agc: draw cache does not account retained shader/DrawDecode storage",
+    "prs": [
+      23486,
+      24987
+    ],
+    "rationale": "Both reference 'Fixes #23485' (draw cache retains shader results outside its byte budget).",
+    "confidence": "high"
+  },
+  {
+    "theme": "shader: embedded vertex-fetch index provenance",
+    "prs": [
+      12316,
+      22382
+    ],
+    "rationale": "Both reference 'Fixes #11977'; titles describe the same provenance requirement.",
+    "confidence": "high"
+  },
+  {
+    "theme": "shader/agc: preserve proven formatted buffer read extents",
+    "prs": [
+      14944,
+      19852
+    ],
+    "rationale": "Both reference 'Fixes #14439'; near-identical titles.",
+    "confidence": "high"
+  },
+  {
+    "theme": "shader: splat the low packed integer lane with a vector shuffle",
+    "prs": [
+      23787,
+      26690
+    ],
+    "rationale": "Identical titles; both reference 'Fixes #23480' (Apple M1 / Metal compiler issue).",
+    "confidence": "high"
+  },
+  {
+    "theme": "agc: render layered draws into a depth view of several slices",
+    "prs": [
+      7256,
+      24083
+    ],
+    "rationale": "Identical titles, both 'needs rebase', both list 'Unblocks PPSA01317'.",
+    "confidence": "high"
+  },
+  {
+    "theme": "relinker: preserve leading spaces in desktop entry names",
+    "prs": [
+      5420,
+      26391
+    ],
+    "rationale": "Identical titles from different authors; 5420 is from 2026-10-13.",
+    "confidence": "high"
+  },
+  {
+    "theme": "libSceLibreSsl3: duplicate QUIC/EC export implementations by two authors",
+    "prs": [
+      16589,
+      17843,
+      16981,
+      19125,
+      17621,
+      19044,
+      17626,
+      21684
+    ],
+    "rationale": "Pairs with identical titles: SSL_is_quic (16589/17843), SSL_set_quic_transport_params (16981/19125), EC_POINT_dup (17621/19044), ECDSA_do_sign (17626/21684). GalaxyGamingFR's versions are older and all 'needs rebase'; fishingpvalues' versions are newer.",
+    "confidence": "high"
+  },
+  {
+    "theme": "libcurl: implement curl_formget",
+    "prs": [
+      17661,
+      22996
+    ],
+    "rationale": "Identical titles from different authors.",
+    "confidence": "high"
+  },
+  {
+    "theme": "perf(agc): fast revalidation over untracked memory by surface stamp",
+    "prs": [
+      6192,
+      14262
+    ],
+    "rationale": "Identical titles; both 'needs rebase' and 'perf numbers missing'. 14262 is by the top contributor (oneandonlydean).",
+    "confidence": "high"
+  },
+  {
+    "theme": "prx dialogs: return ARG_NULL when open param is unreadable (series)",
+    "prs": [
+      21995,
+      22002,
+      22003
+    ],
+    "rationale": "Same author (Kikoarl), same pattern, different dialog libraries. A series, not duplicates; review together.",
+    "confidence": "medium"
+  },
+  {
+    "theme": "prx: declare older callable exports (series)",
+    "prs": [
+      13614,
+      13627,
+      13636,
+      13144,
+      13161,
+      13163,
+      13166,
+      13174,
+      13464
+    ],
+    "rationale": "Same author (kyon-eth), created 2026-10-30, export-declaration pattern. 13144-13464 were not updated since before 2026-11-11 (oldest-updated open PRs).",
+    "confidence": "medium"
+  },
+  {
+    "theme": "Unblocks PPSA01317 (same title, overlapping AGC/shader work)",
+    "prs": [
+      7256,
+      9335,
+      14217,
+      14218,
+      16935,
+      24083,
+      25583
+    ],
+    "rationale": "PR bodies list 'Unblocks PPSA01317'. Different changes that target one title; may interact when merged together. Includes MoltenVK-specific shader fixes 14217/14218.",
+    "confidence": "low"
+  },
+  {
+    "theme": "Unblocks PPSA26344 (Celegans12/slopezjur image-table and sampler work)",
+    "prs": [
+      9748,
+      10193,
+      13920,
+      13928,
+      13929,
+      20519
+    ],
+    "rationale": "PR bodies list 'Unblocks PPSA26344'; most 'needs rebase'. 20519 is an opt-in bindless image heap for the same image tables.",
+    "confidence": "medium"
+  },
+  {
+    "theme": "Unblocks CUSA00900 (B-Howell PS4 tessellation/geometry series)",
+    "prs": [
+      21969,
+      22140,
+      22251,
+      22328,
+      22439
+    ],
+    "rationale": "Same author, PR bodies list 'Unblocks CUSA00900'; four are in 'review queue'. Likely ordered dependencies.",
+    "confidence": "medium"
+  },
+  {
+    "theme": "Unblocks PPSA99169 (DonRyuzaki libc/resolver series)",
+    "prs": [
+      24098,
+      24133,
+      24217,
+      25289,
+      26197
+    ],
+    "rationale": "PR bodies list 'Unblocks PPSA99169'; four by DonRyuzaki (libc++ call_once, emulated TLS, shared mutex, gethostbyaddr), plus 26197 (sampler border colour tables).",
+    "confidence": "medium"
+  },
+  {
+    "theme": "Unblocks PPSA02015",
+    "prs": [
+      13147,
+      15295,
+      15296,
+      15297,
+      16880
+    ],
+    "rationale": "PR bodies list 'Unblocks PPSA02015'. Titles not reviewed in this pass.",
+    "confidence": "low"
+  },
+  {
+    "theme": "Unblocks CUSA00223",
+    "prs": [
+      18184,
+      25557,
+      25802,
+      26182
+    ],
+    "rationale": "PR bodies list 'Unblocks CUSA00223'. Only 26182 title reviewed (agc ANCILLARY under PS_ITER_SAMPLE).",
+    "confidence": "low"
+  },
+  {
+    "theme": "Labelled 'already in main' (skip for ORBIS)",
+    "prs": [
+      7704,
+      22162,
+      22468,
+      22595,
+      23060
+    ],
+    "rationale": "Upstream label 'already in main'; content already on main, nothing to integrate.",
+    "confidence": "high"
+  },
+  {
+    "theme": "Stale and bot PRs",
+    "prs": [
+      9138,
+      25282
+    ],
+    "rationale": "9138 'Bluetooth hid stubs' is the only open PR with the 'stale' label (also 'needs rebase'). 25282 is the only open Dependabot PR (ci: bump the actions group).",
+    "confidence": "high"
+  }
+]

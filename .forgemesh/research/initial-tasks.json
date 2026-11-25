@@ -1,0 +1,226 @@
+[
+  {
+    "key": "ORB-001",
+    "title": "Docker image for the upstream Linux build (no downloaded FFmpeg binaries)",
+    "type": "builder",
+    "priority": 0,
+    "risk": "medium",
+    "components": ["build", "ci"],
+    "files": ["CMakeLists.txt", "cmake/SystemDeps.cmake", "docs/dev/BUILD.md", ".github/workflows/release.yml", "3rdparty/ffmpeg-core"],
+    "hardware": ["os:linux", "gpu:vulkan"],
+    "description": "Write an ORBIS Dockerfile on ubuntu:24.04 using packages_debian and the commands in .forgemesh/research/build-deps.json. Configure downloads FFmpeg binaries unless FFMPEG_PREBUILT_DIR is set (BUILD.md line 77), which breaks the no-binaries rule. Find out how 3rdparty/ffmpeg-core produces its package and either build it from source in a separate stage or document why that is not possible.",
+    "acceptance": [
+      "docker build completes the configure and `cmake --build build` on a clean checkout of upstream main at a pinned SHA",
+      "Configure log shows no FFmpeg download, or the task report states exactly which artifact is downloaded and from where",
+      "Image pins the upstream SHA and records the submodule SHAs (`git submodule status`)"
+    ]
+  },
+  {
+    "key": "ORB-002",
+    "title": "Reproduce the upstream lavapipe test baseline inside the container",
+    "type": "validator",
+    "priority": 0,
+    "risk": "medium",
+    "components": ["tests", "agc"],
+    "files": [".github/workflows/release.yml", ".github/workflows/build.yml", "tools/check_test_registration.py"],
+    "hardware": ["os:linux", "gpu:vulkan"],
+    "description": "Run ctest with the release.yml settings (ANYPS5_REQUIRE_VULKAN=1, GALLIUM_OVERRIDE_CPU_CAPS=avx, --timeout 120, -E '^precise_wait$') on mesa-vulkan-drivers lavapipe. Record pass/fail per test as the ORBIS baseline for main. Expected known issues: write-watch tests need host kernel >= 6.7; four native depth tests fail without /dev/udmabuf (#23709); agc_driver_scattered_runs and agc_driver_image_table_packed_guards fail on some upstream runners (#24834).",
+    "acceptance": [
+      "JUnit XML and ctest log stored as a baseline artifact with the upstream SHA and Mesa version (dpkg-query -W mesa-vulkan-drivers)",
+      "Each failure is classified: environment (kernel, udmabuf), known upstream issue (with issue number), or new",
+      "Tests over 30 s are listed (CONTRIBUTING.md limit)"
+    ]
+  },
+  {
+    "key": "ORB-003",
+    "title": "Upstream sync job: track main and open PR metadata read-only",
+    "type": "integrator",
+    "priority": 0,
+    "risk": "low",
+    "components": ["sync"],
+    "files": [],
+    "hardware": [],
+    "description": "Upstream merges about 1000 commits per day to main (790 commits since 2026-11-24 per the commits API on 2026-11-25) and has 2666 open PRs. Build a scheduled read-only fetch of main and of open PR metadata (number, title, author, labels, head SHA, Fixes/Unblocks/Depends lines) with gh api pagination, under a fixed call budget. No writes to upstream.",
+    "acceptance": [
+      "Job uses only GET requests and records rate-limit usage per run",
+      "Output is a JSONL snapshot comparable across runs (new, closed, merged and label changes)",
+      "ORBIS main fast-forwards from upstream main without local divergence, or the divergence is reported"
+    ]
+  },
+  {
+    "key": "ORB-004",
+    "title": "Choose a winner in each duplicate-PR cluster with a Fixes reference",
+    "type": "reviewer",
+    "priority": 1,
+    "risk": "medium",
+    "components": ["relinker", "agc", "shader", "libSceJson2"],
+    "files": ["core/relinker", "core/libs/prx/libSceAgcDriver", "core/shader/recompiler", "core/libs/prx/libSceJson2"],
+    "hardware": ["os:linux", "gpu:vulkan"],
+    "description": "Clusters in .forgemesh/research/pr-clusters.json where several open PRs reference the same issue: #15234 (15242, 21451, 26698), #26881 (23014, 27123), #22509 (22510, 26696), #25225 (25226, 25279), #23485 (23486, 24987), #11977 (12316, 22382), #14439 (14944, 19852), #23480 (23787, 26690), #15742 (20580, 26221). For each cluster, diff the candidates, check whether the linked issue is still open, and pick one with reasons. Read-only: no comments upstream.",
+    "acceptance": [
+      "One decision record per cluster: chosen PR, rejected PRs, reasons, linked issue state",
+      "The chosen PR merges cleanly into the current ORBIS main, or the conflict is described",
+      "Tests added or changed by the chosen PR pass in the ORB-002 container"
+    ]
+  },
+  {
+    "key": "ORB-005",
+    "title": "Evaluate the 212-PR 'drop redundant errno saves' series as one unit",
+    "type": "challenger",
+    "priority": 1,
+    "risk": "high",
+    "components": ["libs/prx"],
+    "files": ["core/libs/prx"],
+    "hardware": ["os:linux"],
+    "description": "sschandra2006 has 212 open refactor PRs (130 titled 'drop redundant errno saves around guest copies'; 200 opened on 2026-11-25) and 35 merged. Sampled PRs are tiny deletions (26941: 1 file, -3 lines; 27036: 1 file, -3 lines). Check that the removed errno saves are really redundant: does the guest copy helper already preserve errno on every path, including fault paths? Decide whether ORBIS takes the series, a subset, or none.",
+    "acceptance": [
+      "Written argument, with code references, on whether the guest copy helper preserves errno on success and on fault",
+      "At least 5 PRs from the series are applied together and the affected library tests pass",
+      "Recommendation: take all, take a subset (with the list), or reject"
+    ]
+  },
+  {
+    "key": "ORB-006",
+    "title": "Pick one implementation per duplicated libSceLibreSsl3/libcurl export",
+    "type": "reviewer",
+    "priority": 2,
+    "risk": "medium",
+    "components": ["libSceLibreSsl3", "libcurl"],
+    "files": ["core/libs/prx/libSceLibreSsl3", "core/libs/prx/libcurl", "docs/dev/debt"],
+    "hardware": ["os:linux"],
+    "description": "Duplicate pairs with identical titles: SSL_is_quic (16589, 17843), SSL_set_quic_transport_params (16981, 19125), EC_POINT_dup (17621, 19044), ECDSA_do_sign (17626, 21684), curl_formget (17661, 22996). GalaxyGamingFR's versions carry 'needs rebase'. Compare them against the upstream LibreSSL/curl semantics in 3rdparty and pick one per export.",
+    "acceptance": [
+      "Per export: chosen PR and a short semantic comparison against the bundled LibreSSL or curl source",
+      "The chosen PRs merge together without conflict on ORBIS main",
+      "Debt fragments in docs/dev/debt/changes are consistent with the change"
+    ]
+  },
+  {
+    "key": "ORB-007",
+    "title": "Run the AMD Polaris / pre-RDNA2 failing AGC tests on real hardware",
+    "type": "benchmarker",
+    "priority": 1,
+    "risk": "medium",
+    "components": ["agc", "shader"],
+    "files": ["core/libs/prx/libSceAgcDriver/tests/execution/F32FmaDenormalMode2.cpp", "core/libs/prx/libSceAgcDriver/tests/cmake/agc_driver_sample_order_tests.cmake", "core/libs/prx/libSceAgcDriver/Graphics/src/SampleOrder.cpp"],
+    "hardware": ["os:linux", "gpu:vulkan", "gpu:amd", "gpu:amd-polaris"],
+    "description": "Open upstream issues: #9759 (agc_driver_sample_order_recipe_depth_locations fails on RADV Polaris) and #15316 (agc_driver_f32_fma_denormal_mode2 fails on RADV before RDNA2: Mesa splits GLSL Fma). Closed related: #9781 (agc_idle_publish_wait on RADV Polaris). Re-run these tests on ORBIS main on a Polaris card (RX 470/480/570/580) with RADV and record the Mesa version, so ORBIS knows whether they still fail.",
+    "acceptance": [
+      "Host report (ANYPS5_HOST_REPORT=1) attached: GPU, driver, Mesa and kernel version",
+      "Pass/fail for agc_driver_sample_order_recipe_depth_locations, agc_driver_f32_fma_denormal_mode2 and agc_idle_publish_wait, with logs",
+      "Vulkan validation-layer run (>= 1.4.335) with the VUID- count"
+    ]
+  },
+  {
+    "key": "ORB-008",
+    "title": "GPU-change gate: validation-layer diff and GPU list for integrated PRs",
+    "type": "validator",
+    "priority": 1,
+    "risk": "high",
+    "components": ["agc", "shader", "videoout", "ci"],
+    "files": ["tools/vulkan_validation_gate.py", "CONTRIBUTING.md", ".github/pull_request_template.md"],
+    "hardware": ["os:linux", "gpu:vulkan"],
+    "description": "CONTRIBUTING.md requires GPU changes (AGC, shader recompiler, VideoOut) to have validation-layer runs on main and on the change with no new VUID- errors, plus the vendor/model/driver/OS of each GPU tested. Only 645 of 2559 parsed open PR bodies have a non-n/a 'GPUs tested' line. Wire tools/vulkan_validation_gate.py into the ORBIS integration pipeline so no agc/shader PR is integrated without that evidence.",
+    "acceptance": [
+      "The gate runs on lavapipe in the ORB-002 container on main and on a candidate PR and reports new VUIDs",
+      "ORBIS refuses to integrate a PR labelled agc or shader without a GPUs-tested record (upstream's or ORBIS's own)",
+      "Documented how the gate differs from upstream usage, if it does"
+    ]
+  },
+  {
+    "key": "ORB-009",
+    "title": "Batch-merge test of the upstream 'review queue' PRs",
+    "type": "integrator",
+    "priority": 2,
+    "risk": "medium",
+    "components": ["agc", "shader", "relinker", "libkernel"],
+    "files": [".github/workflows/build.yml", "tools/pr_overlap.py", "tools/select_tests.py"],
+    "hardware": ["os:linux", "gpu:vulkan"],
+    "description": "Upstream labels the 30 oldest ready PRs 'review queue' every hour (30 open on 2026-11-25, e.g. 26630, 26601, 26600, 26521, 26221, 26182, 26036, 26034, 21969, 22140, 22251, 22328). Upstream CI can merge up to 40 PRs together (build.yml workflow_dispatch input 'pr'). Reproduce that locally: merge the queue in order onto ORBIS main, run tools/pr_overlap.py and tools/select_tests.py, and report conflicts and failing tests per PR.",
+    "acceptance": [
+      "Merge order and per-PR result (clean, conflict, test failure) recorded",
+      "pr_overlap.py output saved for the batch",
+      "Selected tests pass, or failures are attributed to a specific PR"
+    ]
+  },
+  {
+    "key": "ORB-010",
+    "title": "Map dependency chains for the 'Unblocks title' PR series",
+    "type": "planner",
+    "priority": 2,
+    "risk": "low",
+    "components": ["agc", "shader", "libc", "libkernel"],
+    "files": [],
+    "hardware": [],
+    "description": "108 open PRs carry 'unblocks title' and 373 PR bodies contain 'Depends on #N'. Several titles have 4-7 PRs (PPSA01317, PPSA26344, PPSA99169, CUSA00900, PPSA02015, CUSA00223). Build a dependency graph from the Depends on/Unblocks lines and produce an ordered merge plan per title.",
+    "acceptance": [
+      "Graph (JSON) of PR -> depends-on PRs for all open PRs, with closed/merged dependencies marked",
+      "Ordered plan for each title with >= 4 PRs",
+      "Cycles or dependencies on closed-unmerged PRs are flagged"
+    ]
+  },
+  {
+    "key": "ORB-011",
+    "title": "Triage needs-rebase and long-idle open PRs",
+    "type": "scout",
+    "priority": 3,
+    "risk": "low",
+    "components": ["sync"],
+    "files": [],
+    "hardware": [],
+    "description": "523 open PRs carry 'needs rebase' (229 created before 2026-11-11), 133 are older than 30 days, and 20 were not updated since 2026-11-18. 5 are labelled 'already in main' (7704, 22162, 22468, 22595, 23060) and 9138 is the only 'stale' one. Classify the old ones: superseded by a merged PR, superseded by an open duplicate, or still useful and rebasable by ORBIS.",
+    "acceptance": [
+      "List of PRs older than 30 days with one class each and evidence (merged PR number, duplicate, or rebase result)",
+      "'already in main' PRs excluded from every ORBIS integration list",
+      "No upstream interaction"
+    ]
+  },
+  {
+    "key": "ORB-012",
+    "title": "Licence inventory of the 39 submodules and FidelityFX-FSR",
+    "type": "security",
+    "priority": 2,
+    "risk": "medium",
+    "components": ["3rdparty", "legal"],
+    "files": [".gitmodules", "LICENSE", "3rdparty/FidelityFX-FSR/license.txt"],
+    "hardware": [],
+    "description": "Upstream is GPL-2.0-only. GitHub's licence API identifies only some submodules (e.g. SDL Zlib, SPIRV-Tools Apache-2.0, VulkanMemoryAllocator MIT, ffmpeg-core LGPL-2.1, libusb-cmake LGPL-2.1, mimalloc MIT); many are NOASSERTION, libressl/openbsd returned 404, and pixman, cairo and libyuv are not on GitHub. Read the licence file at each pinned submodule SHA and flag combinations to check for GPL-2.0-only compatibility (notably Apache-2.0 and the LibreSSL/OpenSSL-family licences).",
+    "acceptance": [
+      "Table: submodule, pinned SHA, licence file path, SPDX identifier",
+      "Potential GPL-2.0-only incompatibilities listed for human (legal) review, without conclusions stated as fact",
+      "Licences of the submodules' own nested submodules checked, or noted as not checked"
+    ]
+  },
+  {
+    "key": "ORB-013",
+    "title": "ORBIS CONTRIBUTING and NOTICE: fork status, AI disclosure, no upstream endorsement",
+    "type": "documentation",
+    "priority": 1,
+    "risk": "low",
+    "components": ["docs"],
+    "files": ["CONTRIBUTING.md", "AGENTS.md", "README.md"],
+    "hardware": [],
+    "description": "Write ORBIS docs that state it is an independent collaborative fork of boykopovar/AnyPS5, not endorsed by upstream or by Sony (upstream README already disclaims Sony affiliation), and that ORBIS does not open PRs or comments upstream on its own. Carry over the upstream rules ORBIS relies on: Conventional Commits, no code comments except debt markers, 30 s test limit, the GPU-testing evidence, and the AI disclosure line 'AI-assisted: yes / no' (upstream: 'Say whether the change was written with AI assistance. The author of the pull request is responsible for every line of it.').",
+    "acceptance": [
+      "Docs contain a non-endorsement statement and a link to upstream",
+      "Upstream rules are quoted with their source path, not paraphrased as ORBIS's own",
+      "Every ORBIS agent commit or PR template has an AI-assisted field"
+    ]
+  },
+  {
+    "key": "ORB-014",
+    "title": "Track the upstream main Linux CI failure on anyps5-2 runners (#24834)",
+    "type": "research",
+    "priority": 2,
+    "risk": "low",
+    "components": ["agc", "ci"],
+    "files": ["core/libs/prx/libSceAgcDriver/tests"],
+    "hardware": ["os:linux", "gpu:vulkan"],
+    "description": "Issue #24834 (opened 2026-11-21): agc_driver_scattered_runs and agc_driver_image_table_packed_guards fail on every main Linux job on the anyps5-2 runners since 17 Nov, and pass on anyps5-3. Find out whether the ORB-002 container reproduces it and which host property (CPU, Mesa, kernel) matters, so ORBIS does not blame integrated PRs for it.",
+    "acceptance": [
+      "Reproduced or not reproduced in the ORBIS container, with Mesa version and CPU model",
+      "Both tests added to an ORBIS known-failure list with the issue number if they fail on main",
+      "Host properties that differ between passing and failing runs listed"
+    ]
+  }
+]

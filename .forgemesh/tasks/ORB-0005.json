@@ -1,0 +1,26 @@
+{
+  "id": "ORB-0005",
+  "swarm": "orbis",
+  "title": "Evaluate the 212-PR 'drop redundant errno saves' series as one unit",
+  "objective": "sschandra2006 has 212 open refactor PRs (130 titled 'drop redundant errno saves around guest copies'; 200 opened on 2026-11-25) and 35 merged.",
+  "description": "sschandra2006 has 212 open refactor PRs (130 titled 'drop redundant errno saves around guest copies'; 200 opened on 2026-11-25) and 35 merged. Sampled PRs are tiny deletions (26941: 1 file, -3 lines; 27036: 1 file, -3 lines). Check that the removed errno saves are really redundant: does the guest copy helper already preserve errno on every path, including fault paths? Decide whether ORBIS takes the series, a subset, or none.",
+  "type": "challenger",
+  "priority": 1,
+  "risk": "high",
+  "components": [
+    "libs/prx"
+  ],
+  "files": [
+    "core/libs/prx"
+  ],
+  "hardware": [
+    "os:linux"
+  ],
+  "acceptance": [
+    "Written argument, with code references, on whether the guest copy helper preserves errno on success and on fault",
+    "At least 5 PRs from the series are applied together and the affected library tests pass",
+    "Recommendation: take all, take a subset (with the list), or reject"
+  ],
+  "execution": "container",
+  "profile": "research"
+}

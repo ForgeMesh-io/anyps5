@@ -106,6 +106,7 @@ downloads/
 !/docs/run-report-fixtures/*.json
 !tools/titles.json
 !tools/input-mapper/package.json
+!/.forgemesh/**/*.json
 
 !/assets/*.jpg
 !/assets/*.png

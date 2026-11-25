@@ -1,0 +1,35 @@
+{
+  "id": "ORB-0008",
+  "swarm": "orbis",
+  "title": "GPU-change gate: validation-layer diff and GPU list for integrated PRs",
+  "objective": "CONTRIBUTING.md requires GPU changes (AGC, shader recompiler, VideoOut) to have validation-layer runs on main and on the change with no new VUID- errors, plus the vendor/model/driver/OS of each GPU tested.",
+  "description": "CONTRIBUTING.md requires GPU changes (AGC, shader recompiler, VideoOut) to have validation-layer runs on main and on the change with no new VUID- errors, plus the vendor/model/driver/OS of each GPU tested. Only 645 of 2559 parsed open PR bodies have a non-n/a 'GPUs tested' line. Wire tools/vulkan_validation_gate.py into the ORBIS integration pipeline so no agc/shader PR is integrated without that evidence.",
+  "type": "validator",
+  "priority": 1,
+  "risk": "high",
+  "components": [
+    "agc",
+    "shader",
+    "videoout",
+    "ci"
+  ],
+  "files": [
+    "tools/vulkan_validation_gate.py",
+    "CONTRIBUTING.md",
+    ".github/pull_request_template.md"
+  ],
+  "hardware": [
+    "os:linux",
+    "gpu:vulkan"
+  ],
+  "acceptance": [
+    "The gate runs on lavapipe in the ORB-002 container on main and on a candidate PR and reports new VUIDs",
+    "ORBIS refuses to integrate a PR labelled agc or shader without a GPUs-tested record (upstream's or ORBIS's own)",
+    "Documented how the gate differs from upstream usage, if it does"
+  ],
+  "execution": "container",
+  "profile": "gpu",
+  "depends_on": [
+    "ORB-0002"
+  ]
+}

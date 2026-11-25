@@ -1,0 +1,25 @@
+{
+  "id": "ORB-0010",
+  "swarm": "orbis",
+  "title": "Map dependency chains for the 'Unblocks title' PR series",
+  "objective": "108 open PRs carry 'unblocks title' and 373 PR bodies contain 'Depends on #N'.",
+  "description": "108 open PRs carry 'unblocks title' and 373 PR bodies contain 'Depends on #N'. Several titles have 4-7 PRs (PPSA01317, PPSA26344, PPSA99169, CUSA00900, PPSA02015, CUSA00223). Build a dependency graph from the Depends on/Unblocks lines and produce an ordered merge plan per title.",
+  "type": "planner",
+  "priority": 2,
+  "risk": "low",
+  "components": [
+    "agc",
+    "shader",
+    "libc",
+    "libkernel"
+  ],
+  "files": [],
+  "hardware": [],
+  "acceptance": [
+    "Graph (JSON) of PR -> depends-on PRs for all open PRs, with closed/merged dependencies marked",
+    "Ordered plan for each title with >= 4 PRs",
+    "Cycles or dependencies on closed-unmerged PRs are flagged"
+  ],
+  "execution": "none",
+  "profile": "research"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "ORB-0012",
+  "swarm": "orbis",
+  "title": "Licence inventory of the 39 submodules and FidelityFX-FSR",
+  "objective": "Upstream is GPL-2.0-only.",
+  "description": "Upstream is GPL-2.0-only. GitHub's licence API identifies only some submodules (e.g. SDL Zlib, SPIRV-Tools Apache-2.0, VulkanMemoryAllocator MIT, ffmpeg-core LGPL-2.1, libusb-cmake LGPL-2.1, mimalloc MIT); many are NOASSERTION, libressl/openbsd returned 404, and pixman, cairo and libyuv are not on GitHub. Read the licence file at each pinned submodule SHA and flag combinations to check for GPL-2.0-only compatibility (notably Apache-2.0 and the LibreSSL/OpenSSL-family licences).",
+  "type": "security",
+  "priority": 2,
+  "risk": "medium",
+  "components": [
+    "3rdparty",
+    "legal"
+  ],
+  "files": [
+    ".gitmodules",
+    "LICENSE",
+    "3rdparty/FidelityFX-FSR/license.txt"
+  ],
+  "hardware": [],
+  "acceptance": [
+    "Table: submodule, pinned SHA, licence file path, SPDX identifier",
+    "Potential GPL-2.0-only incompatibilities listed for human (legal) review, without conclusions stated as fact",
+    "Licences of the submodules' own nested submodules checked, or noted as not checked"
+  ],
+  "execution": "none",
+  "profile": "research"
+}

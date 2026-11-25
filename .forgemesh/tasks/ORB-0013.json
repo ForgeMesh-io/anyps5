@@ -1,0 +1,26 @@
+{
+  "id": "ORB-0013",
+  "swarm": "orbis",
+  "title": "ORBIS CONTRIBUTING and NOTICE: fork status, AI disclosure, no upstream endorsement",
+  "objective": "Write ORBIS docs that state it is an independent collaborative fork of boykopovar/AnyPS5, not endorsed by upstream or by Sony (upstream README already disclaims Sony affiliation), and that ORBIS does not open PRs or comments upstream on its own.",
+  "description": "Write ORBIS docs that state it is an independent collaborative fork of boykopovar/AnyPS5, not endorsed by upstream or by Sony (upstream README already disclaims Sony affiliation), and that ORBIS does not open PRs or comments upstream on its own. Carry over the upstream rules ORBIS relies on: Conventional Commits, no code comments except debt markers, 30 s test limit, the GPU-testing evidence, and the AI disclosure line 'AI-assisted: yes / no' (upstream: 'Say whether the change was written with AI assistance. The author of the pull request is responsible for every line of it.').",
+  "type": "documentation",
+  "priority": 1,
+  "risk": "low",
+  "components": [
+    "docs"
+  ],
+  "files": [
+    "CONTRIBUTING.md",
+    "AGENTS.md",
+    "README.md"
+  ],
+  "hardware": [],
+  "acceptance": [
+    "Docs contain a non-endorsement statement and a link to upstream",
+    "Upstream rules are quoted with their source path, not paraphrased as ORBIS's own",
+    "Every ORBIS agent commit or PR template has an AI-assisted field"
+  ],
+  "execution": "none",
+  "profile": "research"
+}

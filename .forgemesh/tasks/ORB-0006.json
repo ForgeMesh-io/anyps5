@@ -1,0 +1,32 @@
+{
+  "id": "ORB-0006",
+  "swarm": "orbis",
+  "title": "Pick one implementation per duplicated libSceLibreSsl3/libcurl export",
+  "objective": "Duplicate pairs with identical titles: SSL_is_quic (16589, 17843), SSL_set_quic_transport_params (16981, 19125), EC_POINT_dup (17621, 19044), ECDSA_do_sign (17626, 21684), curl_formget (17661, 22996).",
+  "description": "Duplicate pairs with identical titles: SSL_is_quic (16589, 17843), SSL_set_quic_transport_params (16981, 19125), EC_POINT_dup (17621, 19044), ECDSA_do_sign (17626, 21684), curl_formget (17661, 22996). GalaxyGamingFR's versions carry 'needs rebase'. Compare them against the upstream LibreSSL/curl semantics in 3rdparty and pick one per export.",
+  "type": "reviewer",
+  "priority": 2,
+  "risk": "medium",
+  "components": [
+    "libSceLibreSsl3",
+    "libcurl"
+  ],
+  "files": [
+    "core/libs/prx/libSceLibreSsl3",
+    "core/libs/prx/libcurl",
+    "docs/dev/debt"
+  ],
+  "hardware": [
+    "os:linux"
+  ],
+  "acceptance": [
+    "Per export: chosen PR and a short semantic comparison against the bundled LibreSSL or curl source",
+    "The chosen PRs merge together without conflict on ORBIS main",
+    "Debt fragments in docs/dev/debt/changes are consistent with the change"
+  ],
+  "execution": "container",
+  "profile": "research",
+  "depends_on": [
+    "ORB-0003"
+  ]
+}

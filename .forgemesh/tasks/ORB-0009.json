@@ -1,0 +1,36 @@
+{
+  "id": "ORB-0009",
+  "swarm": "orbis",
+  "title": "Batch-merge test of the upstream 'review queue' PRs",
+  "objective": "Upstream labels the 30 oldest ready PRs 'review queue' every hour (30 open on 2026-11-25, e.g.",
+  "description": "Upstream labels the 30 oldest ready PRs 'review queue' every hour (30 open on 2026-11-25, e.g. 26630, 26601, 26600, 26521, 26221, 26182, 26036, 26034, 21969, 22140, 22251, 22328). Upstream CI can merge up to 40 PRs together (build.yml workflow_dispatch input 'pr'). Reproduce that locally: merge the queue in order onto ORBIS main, run tools/pr_overlap.py and tools/select_tests.py, and report conflicts and failing tests per PR.",
+  "type": "integrator",
+  "priority": 2,
+  "risk": "medium",
+  "components": [
+    "agc",
+    "shader",
+    "relinker",
+    "libkernel"
+  ],
+  "files": [
+    ".github/workflows/build.yml",
+    "tools/pr_overlap.py",
+    "tools/select_tests.py"
+  ],
+  "hardware": [
+    "os:linux",
+    "gpu:vulkan"
+  ],
+  "acceptance": [
+    "Merge order and per-PR result (clean, conflict, test failure) recorded",
+    "pr_overlap.py output saved for the batch",
+    "Selected tests pass, or failures are attributed to a specific PR"
+  ],
+  "execution": "container",
+  "profile": "gpu",
+  "depends_on": [
+    "ORB-0002",
+    "ORB-0003"
+  ]
+}
