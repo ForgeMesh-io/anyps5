@@ -23,9 +23,9 @@ jobs:
           {
             echo "## Upstream status"
             gh api "repos/${REPO}/compare/boykopovar:AnyPS5:main...main" \
-              --jq '"- `main` vs upstream: \(.ahead_by) ahead, \(.behind_by) behind"'
+              --jq '"- main vs upstream: \(.ahead_by) ahead, \(.behind_by) behind"'
             gh api "repos/${REPO}/compare/main...forgemesh" \
-              --jq '"- `forgemesh` vs `main`: \(.ahead_by) ahead, \(.behind_by) behind"'
+              --jq '"- forgemesh vs main: \(.ahead_by) ahead, \(.behind_by) behind"'
             gh api "repos/boykopovar/AnyPS5/pulls?state=open&per_page=1" -i \
               | grep -i '^link:' | sed -E 's/.*page=([0-9]+)>; rel="last".*/- open upstream PRs: ~\1/' || true
           } >> "$GITHUB_STEP_SUMMARY"
