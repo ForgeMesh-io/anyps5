@@ -27,6 +27,22 @@ Integration rule: `forgemesh` regularly merges `main` (never rebases). Each inte
 - Build and test only in the official ORBIS image (`ghcr.io/forgemesh-io/orbis@sha256:...` from the registry manifest), through `python -m forgemesh sandbox`. GPU tests on real hardware are opt-in per task.
 - Upstream's own workflows are disabled in this fork; ORBIS CI is separate.
 
+## Build modes
+
+Run these Linux/Ninja commands in the verified ORBIS sandbox. `fast` tests the relinker without building the full compatibility layer. `release` enables CMake's Release optimizations and requires compiler-supported interprocedural optimization (LTO). Run the applicable tests before distributing a release.
+
+```sh
+cmake -S . -B build/fast -G Ninja -DCMAKE_BUILD_TYPE=Debug -DANYPS5_RELINKER_ONLY=ON -DBUILD_TESTING=ON
+cmake --build build/fast
+ctest --test-dir build/fast --output-on-failure
+
+cmake -S . -B build/release -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON -DBUILD_TESTING=ON
+cmake --build build/release
+ctest --test-dir build/release --output-on-failure
+```
+
+Use a separate build directory for local CPU tuning (for example, `-DCMAKE_CXX_FLAGS=-march=native` with GCC or Clang). Do not distribute such builds as portable releases. Consider PGO only if measured on representative workloads.
+
 ## Starting points
 
 The upstream snapshot analysis (build dependencies, CI, 25 clusters of duplicate PRs) is in [`.forgemesh/research/`](.forgemesh/research/). Tasks: `.forgemesh/tasks/ORB-*.json`.
